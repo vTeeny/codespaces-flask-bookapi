@@ -21,7 +21,7 @@ def hello_world():
 
 # Create (POST) operation
 @app.route('/books', methods=['POST'])
-#@basic_auth.required
+@basic_auth.required
 def create_book():
     data = request.get_json()
 
@@ -36,7 +36,7 @@ def create_book():
 
 # Read (GET) operation - Get all books
 @app.route('/books', methods=['GET'])
-#@basic_auth.required
+@basic_auth.required
 def get_all_books():
     return jsonify({"books": books})
 

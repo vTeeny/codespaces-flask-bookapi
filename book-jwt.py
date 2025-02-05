@@ -3,12 +3,10 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token
 
 app = Flask(__name__)
 
-# Set up JWT
 app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'
 jwt = JWTManager(app)
 
 
-# Sample data (in-memory database for simplicity)
 books = [
     {"id": 1, "title": "Book 1", "author": "Author 1"},
     {"id": 2, "title": "Book 2", "author": "Author 2"},
@@ -16,14 +14,12 @@ books = [
 ]
 
 
-# Authentication endpoint to get JWT token
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username', None)
     password = data.get('password', None)
 
-    # In a real-world scenario, you would check the credentials against a database
     if username == 'user' and password == 'pass':
         access_token = create_access_token(identity=username)
         return jsonify(access_token=access_token), 200
@@ -34,7 +30,6 @@ def login():
 def hello_world():
     return "<p>Hello, World!</p>"
 
-# Create (POST) operation
 @app.route('/books', methods=['POST'])
 @jwt_required()
 def create_book():
@@ -49,13 +44,11 @@ def create_book():
     books.append(new_book)
     return jsonify(new_book), 201
 
-# Read (GET) operation - Get all books
 @app.route('/books', methods=['GET'])
 @jwt_required()
 def get_all_books():
     return jsonify({"books": books})
 
-# Read (GET) operation - Get a specific book by ID
 @app.route('/books/<int:book_id>', methods=['GET'])
 @jwt_required()
 def get_book(book_id):
@@ -65,7 +58,6 @@ def get_book(book_id):
     else:
         return jsonify({"error": "Book not found"}), 404
 
-# Update (PUT) operation
 @app.route('/books/<int:book_id>', methods=['PUT'])
 @jwt_required()
 def update_book(book_id):
@@ -77,7 +69,6 @@ def update_book(book_id):
     else:
         return jsonify({"error": "Book not found"}), 404
 
-# Delete operation
 @app.route('/books/<int:book_id>', methods=['DELETE'])
 @jwt_required()
 def delete_book(book_id):
